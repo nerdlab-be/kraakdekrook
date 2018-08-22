@@ -1,0 +1,27 @@
+<html>
+  <script src="https://www.gstatic.com/firebasejs/5.4.0/firebase.js"></script>
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyCSLoNuHVlqByDMr4YIFTpOrTsApowzphg",
+      authDomain: "kraakdekrook.firebaseapp.com",
+      databaseURL: "https://kraakdekrook.firebaseio.com",
+      projectId: "kraakdekrook",
+      storageBucket: "kraakdekrook.appspot.com",
+      messagingSenderId: "818392028162"
+    };
+    firebase.initializeApp(config);
+    var db = firebase.firestore();
+    db.collection("scans").onSnapshot(querySnapshot => {
+      var scans = []
+      querySnapshot.forEach(doc => {
+        scans.push(doc.data());
+      })
+      // do anything you want with scans here
+      document.querySelector('pre').innerHTML = JSON.stringify(scans);
+    });
+  </script>
+  <body>
+    <pre></pre>
+  </body>
+</html>
