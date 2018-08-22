@@ -17,7 +17,9 @@
   },
   "homepage": "https://github.com/JacquesSlock/kraakdekrook#readme",
   "dependencies": {
+    "connect": "^3.6.6",
     "de-krook-beacons": "^1.0.2",
-    "firebase-admin": "^6.0.0"
+    "firebase-admin": "^6.0.0",
+    "serve-static": "^1.13.2"
   }
 }

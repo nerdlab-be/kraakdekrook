@@ -26,7 +26,7 @@
 }
 
 </style>
-<svg width="960" height="500"></svg>
+<svg id="1" width="1920" height="300"></svg>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
 
@@ -34,9 +34,22 @@ var svg = d3.select("svg").on("touchmove mousemove", moved),
     width = +svg.attr("width"),
     height = +svg.attr("height");
 
+var sites = [];
+d3.json("http://localhost:8080/locations-parsed.json", function(error, data) {
+  data.forEach(function(location) {
+    if (location.level == 1) {
+        sites.push([location.x, location.y]);
+    }
+  })
+});
+
+
+
+
+/*
 var sites = d3.range(100)
     .map(function(d) { return [Math.random() * width, Math.random() * height]; });
-
+*/
 var voronoi = d3.voronoi()
     .extent([[-1, -1], [width + 1, height + 1]]);
 
