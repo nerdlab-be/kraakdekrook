@@ -7,27 +7,50 @@
 }
 
 .links {
-  stroke: #000;
+  stroke: rgba(255, 255, 255, 0.11);
+  stroke-width: 1px;
 }
 
 .sites {
-  fill: rgb(255, 61, 213);
-  stroke: rgb(195, 0, 255);
+  fill: rgba(255, 0, 200, 0.397);
+  stroke: rgba(195, 0, 255, 0.301);
+
 }
 
 .triangles .primary {
-  fill: rgb(91, 0, 177);
+  fill: rgba(0, 11, 167, 0.315);
 }
 
 .links .primary {
-  stroke: rgb(0, 69, 126);
+  stroke: rgba(0, 140, 255, 0.562);
 }
 
 .sites :first-child {
-  fill: rgb(31, 0, 102);
-}
+  fill: rgba(31, 0, 102, 0.76);
 
+  
+}
+video#bgvid { 
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -100;
+    -ms-transform: translateX(-50%) translateY(-50%);
+    -moz-transform: translateX(-50%) translateY(-50%);
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+    background: url(polina.jpg) no-repeat;
+    background-size: cover; 
+}
 </style>
+<video playsinline autoplay muted loop poster="polina.jpg" id="bgvid">
+  <source src="sterrenhemel.mp4" type="video/webm">
+  <source src="sterrenhemel.mp4" type="video/mp4">
+</video>
 <div id='level_3'>
     <svg id='svg_3' width="1920" height="300"></svg>
 </div>
@@ -63,8 +86,9 @@ function init() {
   }
 
   Object.keys(sites).forEach(function eachSite(level) {
-    function moved() {
-      sites[level][0] = d3.mouse(this);
+    function moved(center) {
+      console.log(center);
+      sites[level][0] = center;
       redraw();
     }
   
@@ -93,7 +117,7 @@ function init() {
     }
 
     var svg = 
-        d3.select(("#svg_" + level).replace('-', '_')).on("touchmove mousemove", moved),
+        d3.select(("#svg_" + level).replace('-', '_')),
         width = +svg.attr("width"),
         height = +svg.attr("height");
 
@@ -116,13 +140,40 @@ function init() {
       .selectAll("circle")
       .data(sites[level])
       .enter().append("circle")
-        .attr("r", 2.5)
+        .attr("r", function(d,i) {return i==0 ? 6 : 2.5 ;  })
         .call(redrawSite);
+
+    
+    function getCoord(){
+      // This code gets the centroid of the three closest beacons to the device, e.g. a sort of fake location
+
+
+      var beacons = [{"beacons":[{"krookid":169,"rssi":-75},{"krookid":171,"rssi":-60},{"krookid":170,"rssi":-74},{"krookid":175,"rssi":-80}],"id":"michiel"}];
+
+      var closest = beacons[0].beacons.sort((a, b) => b.rssi - a.rssi).slice(0, 3)
+      var positions = locations;
+
+      var c1 = [positions[closest[0].krookid].x, positions[closest[0].krookid].y];
+      var c2 = [positions[closest[1].krookid].x, positions[closest[1].krookid].y];
+      var c3 = [positions[closest[2].krookid].x, positions[closest[2].krookid].y];
+
+      var getCentroid = function (coord) {
+        var center = coord.reduce(function (x,y) {
+          return [x[0] + y[0]/coord.length, x[1] + y[1]/coord.length]
+        }, [0,0])
+        return center;
+      }
+      moved(getCentroid([c1, c2, c3]))
+
+      console.log(getCentroid([c1, c2, c3]));
+      }
+      setInterval(getCoord(), 3000);
   });
 
 }
-
+var locations;
 d3.json('locations-parsed.json', function(data) {
+    locations = data;
     for (var i = 0; i < data.length; i++) {
         if (sites[data[i].level] == undefined) {
             sites[data[i].level] = []
@@ -131,4 +182,8 @@ d3.json('locations-parsed.json', function(data) {
     }
     init();
 });
+
+
+
+
 </script>
