@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.triangles {
+  fill: none;
+}
+
+.links {
+  stroke: #000;
+}
+
+.sites {
+  fill: rgb(255, 61, 213);
+  stroke: rgb(195, 0, 255);
+}
+
+.triangles .primary {
+  fill: rgb(91, 0, 177);
+}
+
+.links .primary {
+  stroke: rgb(0, 69, 126);
+}
+
+.sites :first-child {
+  fill: rgb(31, 0, 102);
+}
+
+</style>
+<div id='level_3'>
+    <svg id='svg_3' width="1920" height="300"></svg>
+</div>
+<div id='level_2'>
+    <svg id='svg_2' width="1920" height="300"></svg>
+</div>
+<div id='level_1'>
+    <svg id='svg_1' width="1920" height="300"></svg>
+</div>
+<div id='level_0'>
+    <svg id='svg_0' width="1920" height="300"></svg>
+</div>
+<div id='level_-1'>
+    <svg id='svg__1' width="1920" height="300"></svg>
+</div>
+<div id='level_-2'>
+<svg id='svg__2' width="1920" height="300"></svg>
+</div>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script>
+
+
+    
+
+
+sites__2 = [];
+sites__1 = [];
+sites_0 = [];
+sites_1 = [];
+sites_2 = [];
+sites_3 = [];
+const sites = {}
+d3.json('locations-parsed.json', function(data) {
+    for (var i = 0; i < data.length; i++) {
+        // console.log(data);
+        if (sites[data[i].level] == undefined) {
+            sites[data[i].level] = []
+        }
+        sites[data[i].level].push([data[i].x, data[i].y]);
+
+        if (data[i].level=='-2'){
+        x = data[i].x
+        y = data[i].y
+        sites__2.push( [x , y]);
+        }
+        if (data[i].level=='-1'){
+        x = data[i].x
+        y = data[i].y
+        sites__1.push( [x , y]);
+        }
+        if (data[i].level=='0'){
+        x = data[i].x
+        y = data[i].y
+        sites_0.push( [x , y]);
+        }
+        if (data[i].level=='1'){
+        x = data[i].x
+        y = data[i].y
+        sites_1.push( [x , y]);
+        }
+        if (data[i].level=='2'){
+        x = data[i].x
+        y = data[i].y
+        sites_2.push( [x , y]);
+        }
+        if (data[i].level=='3'){
+        x = data[i].x
+        y = data[i].y
+        sites_3.push( [x , y]);
+        }
+
+    }
+    console.log(sites);
+});
+
+// verdiep3
+
+var voronoi = d3.voronoi();
+
+function redrawSite(site) {
+  site
+      .attr("cx", function(d) { return d[0]; })
+      .attr("cy", function(d) { return d[1]; });
+}
+
+var svg3 = 
+    d3.select("#svg_3").on("touchmove mousemove", moved3),
+    width = +svg3.attr("width"),
+    height = +svg3.attr("height");
+
+var triangle3 = svg3.append("g")
+    .attr("class", "triangles")
+  .selectAll("path")
+  .data(voronoi.triangles(sites_3))
+  .enter().append("path")
+    .call(redrawTriangle3);
+
+var link3 = svg3.append("g")
+    .attr("class", "links")
+  .selectAll("line")
+  .data(voronoi.links(sites_3))
+  .enter().append("line")
+    .call(redrawLink3);
+
+var site3 = svg3.append("g")
+    .attr("class", "sites")
+  .selectAll("circle")
+  .data(sites_3)
+  .enter().append("circle")
+    .attr("r", 2.5)
+    .call(redrawSite);
+
+function moved3() {
+  sites_3[0] = [150,150];
+  redraw3();
+}
+
+function redraw3() {
+  var diagram = voronoi(sites_3);
+  triangle3 = triangle3.data(diagram.triangles()), triangle3.exit().remove();
+  triangle3 = triangle3.enter().append("path").merge(triangle3).call(redrawTriangle3);
+  link3 = link3.data(diagram.links()), link3.exit().remove();
+  link3 = link3.enter().append("line").merge(link3).call(redrawLink3);
+  site3 = site3.data(sites_3).call(redrawSite);
+}
+
+function redrawTriangle3(triangle) {
+  triangle
+      .classed("primary", function(d) { return d[0] === sites_3[0] || d[1] === sites_3[0] || d[2] === sites_3[0]; })
+      .attr("d", function(d) { return "M" + d.join("L") + "Z"; });
+}
+
+function redrawLink3(link) {
+  link
+      .classed("primary", function(d) { return d.source === sites_3[0] || d.target === sites_3[0]; })
+      .attr("x1", function(d) { return d.source[0]; })
+      .attr("y1", function(d) { return d.source[1]; })
+      .attr("x2", function(d) { return d.target[0]; })
+      .attr("y2", function(d) { return d.target[1]; });
+}
+
+// document.onload=function() {
+//     redraw3();
+// }
+
+
+// niveau2
+
+var svg2 = 
+    d3.select("#svg_2").on("touchmove mousemove", moved2),
+    width = +svg2.attr("width"),
+    height = +svg2.attr("height");
+
+var triangle2 = svg2.append("g")
+    .attr("class", "triangles")
+  .selectAll("path")
+  .data(voronoi.triangles(sites_2))
+  .enter().append("path")
+    .call(redrawTriangle3);
+
+var link2 = svg2.append("g")
+    .attr("class", "links")
+  .selectAll("line")
+  .data(voronoi.links(sites_2))
+  .enter().append("line")
+    .call(redrawLink2);
+
+var site2 = svg2.append("g")
+    .attr("class", "sites")
+  .selectAll("circle")
+  .data(sites_2)
+  .enter().append("circle")
+    .attr("r", 2.5)
+    .call(redrawSite);
+
+function moved2() {
+  sites_2[0] = [150,450];
+  redraw2();
+}
+
+function redraw2() {
+  var diagram = voronoi(sites_2);
+  triangle2 = triangle2.data(diagram.triangles()), triangle2.exit().remove();
+  triangle2 = triangle2.enter().append("path").merge(triangle2).call(redrawTriangle2);
+  link2 = link2.data(diagram.links()), link2.exit().remove();
+  link2 = link2.enter().append("line").merge(link2).call(redrawLink2);
+  site2 = site2.data(sites_2).call(redrawSite);
+}
+
+function redrawTriangle2(triangle) {
+  triangle
+      .classed("primary", function(d) { return d[0] === sites_2[0] || d[1] === sites_2[0] || d[2] === sites_2[0]; })
+      .attr("d", function(d) { return "M" + d.join("L") + "Z"; });
+}
+
+function redrawLink2(link) {
+  link
+      .classed("primary", function(d) { return d.source === sites_2[0] || d.target === sites_2[0]; })
+      .attr("x1", function(d) { return d.source[0]; })
+      .attr("y1", function(d) { return d.source[1]; })
+      .attr("x2", function(d) { return d.target[0]; })
+      .attr("y2", function(d) { return d.target[1]; });
+}
+
+</script>
