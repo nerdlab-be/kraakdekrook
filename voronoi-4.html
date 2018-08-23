@@ -76,13 +76,14 @@ video#bgvid {
     var config = {
       apiKey: "AIzaSyCSLoNuHVlqByDMr4YIFTpOrTsApowzphg",
       authDomain: "kraakdekrook.firebaseapp.com",
-      databaseURL: "https://kraakdekrook.firebaseio.com",
+      databaseURL: "https://kraakkrook-c581e.firebaseio.com/ESP32",
       projectId: "kraakdekrook",
       storageBucket: "kraakdekrook.appspot.com",
       messagingSenderId: "818392028162"
     };
     firebase.initializeApp(config);
     var db = firebase.firestore();
+    console.log(db);
   </script>
 <script>
 
@@ -90,7 +91,7 @@ const sites = {};
 const movedFuncs = {};
 
 function init() {
-  // verdiep3
+
 
   var voronoi = d3.voronoi();
 
