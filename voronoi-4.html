@@ -70,9 +70,24 @@ video#bgvid {
 <svg id='svg__2' width="1920" height="300"></svg>
 </div>
 <script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.4.0/firebase.js"></script>
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyCSLoNuHVlqByDMr4YIFTpOrTsApowzphg",
+      authDomain: "kraakdekrook.firebaseapp.com",
+      databaseURL: "https://kraakdekrook.firebaseio.com",
+      projectId: "kraakdekrook",
+      storageBucket: "kraakdekrook.appspot.com",
+      messagingSenderId: "818392028162"
+    };
+    firebase.initializeApp(config);
+    var db = firebase.firestore();
+  </script>
 <script>
 
 const sites = {};
+const movedFuncs = {};
 
 function init() {
   // verdiep3
@@ -91,6 +106,7 @@ function init() {
       sites[level][0] = center;
       redraw();
     }
+    movedFuncs[level] = moved;
   
     function redraw() {
       var diagram = voronoi(sites[level]);
@@ -142,34 +158,42 @@ function init() {
       .enter().append("circle")
         .attr("r", function(d,i) {return i==0 ? 6 : 2.5 ;  })
         .call(redrawSite);
-
-    
-    function getCoord(){
-      // This code gets the centroid of the three closest beacons to the device, e.g. a sort of fake location
-
-
-      var beacons = [{"beacons":[{"krookid":169,"rssi":-75},{"krookid":171,"rssi":-60},{"krookid":170,"rssi":-74},{"krookid":175,"rssi":-80}],"id":"michiel"}];
-
-      var closest = beacons[0].beacons.sort((a, b) => b.rssi - a.rssi).slice(0, 3)
-      var positions = locations;
-
-      var c1 = [positions[closest[0].krookid].x, positions[closest[0].krookid].y];
-      var c2 = [positions[closest[1].krookid].x, positions[closest[1].krookid].y];
-      var c3 = [positions[closest[2].krookid].x, positions[closest[2].krookid].y];
-
-      var getCentroid = function (coord) {
-        var center = coord.reduce(function (x,y) {
-          return [x[0] + y[0]/coord.length, x[1] + y[1]/coord.length]
-        }, [0,0])
-        return center;
-      }
-      moved(getCentroid([c1, c2, c3]))
-
-      console.log(getCentroid([c1, c2, c3]));
-      }
-      setInterval(getCoord(), 3000);
+      // setInterval(getCoord(), 3000);
   });
 
+  function getCoord(beacons){
+    // This code gets the centroid of the three closest beacons to the device, e.g. a sort of fake location
+
+
+    // var beacons = [{"beacons":[{"krookid":169,"rssi":-75},{"krookid":171,"rssi":-60},{"krookid":170,"rssi":-74},{"krookid":175,"rssi":-80}],"id":"michiel"}];
+
+    var closest = beacons[0].beacons.sort((a, b) => b.rssi - a.rssi).slice(0, 3)
+    var positions = locations;
+    var level = positions[closest[0].krookid].level;
+
+    var c1 = [positions[closest[0].krookid].x, positions[closest[0].krookid].y];
+    var c2 = [positions[closest[1].krookid].x, positions[closest[1].krookid].y];
+    var c3 = [positions[closest[2].krookid].x, positions[closest[2].krookid].y];
+
+    var getCentroid = function (coord) {
+      var center = coord.reduce(function (x,y) {
+        return [x[0] + y[0]/coord.length, x[1] + y[1]/coord.length]
+      }, [0,0])
+      return center;
+    }
+    movedFuncs[level](getCentroid([c1, c2, c3]))
+
+    console.log(getCentroid([c1, c2, c3]));
+  }
+
+  db.collection("scans").onSnapshot(querySnapshot => {
+    var scans = []
+    querySnapshot.forEach(doc => {
+      scans.push(doc.data());
+    })
+    var beacons = scans;
+    getCoord(beacons);
+  });
 }
 var locations;
 d3.json('locations-parsed.json', function(data) {
