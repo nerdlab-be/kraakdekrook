@@ -1,5 +1,7 @@
-#define ARDUHAL_LOG_LEVEL 4
-#include <esp32-hal-log.h>  
+// board: ESP32 Dev Module
+
+// #define ARDUHAL_LOG_LEVEL 4
+// #include <esp32-hal-log.h>  
 #include <Esp.h>
 #include <Arduino.h>
 #include <WiFi.h>
@@ -15,16 +17,13 @@
 int scanTime = 2; //in seconds 
 int sleepTime = 5; // in seconds
 /* backend settings */ 
-String firebaseLink = "https://kraakkrook-c581e.firebaseio.com:443/";
+String firebaseLink = "http://krookfirebase.barkr.uk/";
 String deviceName = "ESP32";
 /* Wifi settings */
-char ssid[] = "MichielNet";
-char password[] = "blablabla";
-/* time settings*/
-const char* ntpServer = "pool.ntp.org";
-const long  gmtOffset_sec = 3600;
-const int   daylightOffset_sec = 3600;
-/* end settings */
+/*char ssid[] = "***REMOVED***";
+char password[] = "***REMOVED***";*/
+char ssid[] = "Nerdlab";
+char password[] = "***REMOVED***";
 
 BLEScan* pBLEScan = BLEDevice::getScan(); 
 WiFiMulti wifiMulti;
@@ -70,11 +69,7 @@ void setup() {
         delay(500);
         Serial.print(".");
     }
-    Serial.println(" CONNECTED");
-  
-    //init and get the time
-    configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
-    
+    Serial.println(" CONNECTED"); 
 
    
     wifiMulti.addAP(ssid, password); 
@@ -82,7 +77,7 @@ void setup() {
     pBLEScan->setAdvertisedDeviceCallbacks(new MyAdvertisedDeviceCallbacks());
     pBLEScan->setActiveScan(true);
     scan();
-    printLocalTime();
+    //printLocalTime();
     pushToFirebase();
     delay(sleepTime * 1000);
     ESP.restart();
@@ -94,7 +89,8 @@ void setup() {
 
 void scan() {
   json = "{";
-  BLEScanResults foundDevices = pBLEScan->start(scanTime);  
+  BLEScanResults foundDevices = pBLEScan->start(scanTime);
+  Serial.println(json);  
   json = json.substring(0, json.length() - 1);
   json = json + "}";
   delete pBLEScan;
@@ -103,26 +99,16 @@ void scan() {
 
 void pushToFirebase(){
       Serial.println("FIREBASE");
-      printLocalTime();
-      if((wifiMulti.run() == WL_CONNECTED)) {
-        if(!http.begin("https://httpstat.us/200")) {
-          Serial.println("AAAAAAAAAAAAAA");
-        }; //HTTP
-        int getCode = http.GET();
-        if(getCode > 0) {
-          if(getCode == HTTP_CODE_OK) {
-                  Serial.println("BBBBBB");
-                  String payload = http.getString();
-                  Serial.println(payload);
-          }
-        }else {
-              Serial.printf("GET failed, error: %s\n", http.errorToString(getCode).c_str());
-        }
-        http.end();
+      //printLocalTime();
+      if((wifiMulti.run() == WL_CONNECTED)) {       
         if(!http.begin(firebaseLink + deviceName + ".json")) {
           Serial.println("AAAAAAAAAAAAAA");
         }; //HTTP
+        int getal1=random(-100,0);
+        int getal2=random(-100,0);
         http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+        json="{\"02\": {\"RSSI\":"+String(getal1)+"},\"6d\":{\"RSSI\" :"+String(getal2)+"}}";
+        Serial.println(json);
         int httpCode = http.PUT(json);
         //int httpGet=http.get(kHostname, kPath);
         // Serial.println(json);
@@ -141,6 +127,6 @@ void pushToFirebase(){
 }
 
 void loop() {
-    delay(1000);
-    printLocalTime();
+//    delay(1000);
+//    printLocalTime();
 }
