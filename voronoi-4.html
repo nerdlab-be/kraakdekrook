@@ -93,16 +93,15 @@ video#bgvid {
   <script>
     // Initialize Firebase
     var config = {
-      apiKey: "AIzaSyCSLoNuHVlqByDMr4YIFTpOrTsApowzphg",
-      authDomain: "kraakdekrook.firebaseapp.com",
-      databaseURL: "https://kraakkrook-c581e.firebaseio.com/ESP32",
-      projectId: "kraakdekrook",
-      storageBucket: "kraakdekrook.appspot.com",
-      messagingSenderId: "818392028162"
+      apiKey: "AIzaSyCry7RclR4ZOh4A956n7mqugWUExLAba_0",
+      authDomain: "kraakkrook-c581e.firebaseapp.com",
+      databaseURL: "https://kraakkrook-c581e.firebaseio.com",
+      projectId: "kraakkrook-c581e",
+      storageBucket: "kraakkrook-c581e.appspot.com",
+      messagingSenderId: "610352027337"
     };
     firebase.initializeApp(config);
-    var db = firebase.firestore();
-    console.log(db);
+    var db = firebase.database();
   </script>
 <script>
 
@@ -164,6 +163,12 @@ function init() {
       .enter().append("path")
         .call(redrawtriangle);
 
+    function length(l) {
+      var s = l.source;
+      var t = l.target;
+      return Math.sqrt((s[0] - t[0]) * (s[0] - t[0]) + (s[1] - t[1]) * (s[1] - t[1]));
+    }
+
     var link = svg.append("g")
         .attr("class", "links")
       .selectAll("line")
@@ -191,28 +196,40 @@ function init() {
     var positions = locations;
     var level = positions[closest[0].krookid].level;
 
-    var c1 = [positions[closest[0].krookid].x, positions[closest[0].krookid].y];
-    var c2 = [positions[closest[1].krookid].x, positions[closest[1].krookid].y];
-    var c3 = [positions[closest[2].krookid].x, positions[closest[2].krookid].y];
-
+    var closestNodeCoords = closest.map(c => {
+      var position = positions[c.krookid];
+      return [position.x, position.y];
+    });
     var getCentroid = function (coord) {
       var center = coord.reduce(function (x,y) {
         return [x[0] + y[0]/coord.length, x[1] + y[1]/coord.length]
       }, [0,0])
       return center;
     }
-    movedFuncs[level](getCentroid([c1, c2, c3]))
+    movedFuncs[level](getCentroid(closestNodeCoords))
 
-    console.log(getCentroid([c1, c2, c3]));
+    console.log(getCentroid(closestNodeCoords));
   }
 
-  db.collection("scans").onSnapshot(querySnapshot => {
+  /* db.collection("scans").onSnapshot(querySnapshot => {
     var scans = []
     querySnapshot.forEach(doc => {
       scans.push(doc.data());
     })
     var beacons = scans;
     getCoord(beacons);
+  }); */
+
+  db.ref('/ESP32').on('value', function(snapshot) {
+    const rawData = snapshot.val();
+    const processedData = Object.keys(rawData).map(hexId => {
+      const beaconData = rawData[hexId];
+      return {
+        rssi: beaconData.RSSI,
+        krookid: parseInt(hexId, 16),
+      }
+    });
+    getCoord([{ beacons: processedData }]);
   });
 }
 var locations;
