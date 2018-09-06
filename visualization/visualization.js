@@ -32,6 +32,8 @@ var getSensorLocationsForLevel = function getSensorLocationsForLevel(level) {
 function init() {
   var voronoi = d3.voronoi();
 
+  setTimeout(function() { window.location.reload(true); }, 120000);
+
   function redrawSite(site) {
     site
       .attr("cx", function (d) { return d[0]; })
