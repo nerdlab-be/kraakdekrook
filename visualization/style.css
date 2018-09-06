@@ -14,13 +14,13 @@
 }
 
 .links {
-  stroke: rgba(255, 255, 255, 0.11);
+  stroke: rgba(255, 255, 255, 0.55);
   stroke-width: 1px;
 }
 
 .sites {
-  fill: rgba(255, 0, 200, 0.397);
-  stroke: rgba(195, 0, 255, 0.301);
+  fill: rgba(255, 0, 200, 1);
+  stroke: rgba(195, 0, 255, 1);
 
 }
 

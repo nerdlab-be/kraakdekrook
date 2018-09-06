@@ -61,7 +61,7 @@ function init() {
       sensor.exit().remove();
       sensor = sensor.enter()
         .append("circle")
-        .attr("r", 6)
+        .attr("r", 10)
         .call(redrawSensor);
     }
 
@@ -110,7 +110,7 @@ function init() {
       .selectAll("circle")
       .data(sites[level])
       .enter().append("circle")
-      .attr("r", 2.5)
+      .attr("r", 5)
       .call(redrawSite);
     
     var sensor = svg.append("g")
@@ -119,7 +119,7 @@ function init() {
       .data(getSensorLocationsForLevel(level), sl => sl.sensorId)
       .enter()
         .append("circle")
-        .attr("r", 6)
+        .attr("r", 10)
         .call(redrawSensor);
   });
 
