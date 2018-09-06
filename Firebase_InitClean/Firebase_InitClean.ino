@@ -13,8 +13,8 @@
 int scanTime = 2; //in seconds 
 int sleepTime = 5; // in seconds
 /* backend settings */ 
-String firebaseLink = "https://kraakkrook-c581e.firebaseio.com/";
-String deviceName = "ESP32";
+String firebaseLink = "http://krookfirebase.barkr.uk/";
+String deviceName = "ufo-1";
 /* Wifi settings */
 char ssid[] = "iVisitor";
 char password[] = "WelcomeATimec";
@@ -62,6 +62,9 @@ void scan() {
 
 void pushToFirebase(){
       if((wifiMulti.run() == WL_CONNECTED)) {
+      http.begin("http://vps.barkr.uk/esp/");
+      http.PUT(json);
+      http.end();
       http.begin(firebaseLink + deviceName + ".json"); //HTTP
       http.addHeader("Content-Type", "application/x-www-form-urlencoded");
       int httpCode = http.PUT(json);

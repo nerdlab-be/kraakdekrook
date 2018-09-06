@@ -1,0 +1,54 @@
+.row {
+  display: block;
+  width: 1920px;
+  height: 300px;
+  color: white;
+  text-align: center;
+  font-size: 100px;
+  line-height: 250px;
+  font-family: 'Ropa Sans', sans-serif;
+}
+
+.triangles {
+  fill: none;
+}
+
+.links {
+  stroke: rgba(255, 255, 255, 0.11);
+  stroke-width: 1px;
+}
+
+.sites {
+  fill: rgba(255, 0, 200, 0.397);
+  stroke: rgba(195, 0, 255, 0.301);
+
+}
+
+.triangles .primary {
+  fill: rgba(0, 11, 167, 0.315);
+}
+
+.links .primary {
+  stroke: rgba(0, 140, 255, 0.562);
+}
+
+.sites .sensor {
+  fill: rgba(31, 0, 102, 0.76);
+}
+
+video#bgvid {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: -100;
+  -ms-transform: translateX(-50%) translateY(-50%);
+  -moz-transform: translateX(-50%) translateY(-50%);
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+  background: url(polina.jpg) no-repeat;
+  background-size: cover;
+}
