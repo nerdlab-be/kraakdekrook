@@ -14,7 +14,7 @@
 }
 
 .links {
-  stroke: rgba(255, 255, 255, 0.55);
+  stroke: rgba(255, 255, 255, .55);
   stroke-width: 1px;
 }
 
@@ -52,3 +52,16 @@ video#bgvid {
   background: url(polina.jpg) no-repeat;
   background-size: cover;
 }
+
+.level {
+  position: relative;
+}
+
+  .level-indicator {
+    position: absolute;
+    font-family: "Ropa sans", sans-serif;
+    color: white;
+    font-size: 52px;
+    top: 20px;
+    left: 30px;
+  }
