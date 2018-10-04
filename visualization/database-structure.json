@@ -1,0 +1,29 @@
+{
+    "sensors": {
+        "flarbrox": {
+            "name": "Flarbrox",
+            "beacons": [
+                {
+                    "krookid": 123,
+                    "rssi": -20
+                }
+            ],
+            "battery": 3.9
+        }
+    },
+    "possibleObjectives": {
+        "book-1": {
+            "message": "${sensorName} is de weg naar zijn thuisplaneet kwijt. Breng hem naar \"De planeten in beeld\"!",
+            "x": 100,
+            "y": 200,
+            "radius": 3
+        }
+    },
+    "activeObjectives": [
+        {
+            "sensorId": "flarbrox",
+            "objectiveId": "book-1"
+        }
+    ],
+    "version": 1
+}
