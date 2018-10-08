@@ -19,11 +19,9 @@ String firebaseLink = "http://krookfirebase.barkr.uk/";
 String deviceName = "ufo-1";
 String batteryName = "batt-1";
 /* Wifi settings */
-//Krook
-/*char ssid[] = "iVisitor";
-char password[] = "WelcomeATimec";*/
-char ssid[] = "WiFi-2.4-E400";
-char password[] = "JasperJasmijnRonaldRaven";
+// Krook WiFi
+char ssid[] = "iVisitor";
+char password[] = "WelcomeATimec";
 /* end settings */
 
 
@@ -117,9 +115,9 @@ void pushToFirebase(){
         int httpCode_json = http.PUT(json);
         
         // Debugging prints
-        Serial.println("PUT2: "+String(httpCode_json));
+        /*Serial.println("PUT2: "+String(httpCode_json));
         Serial.println("The .json: "+json);
-        Serial.println(firebaseLink + deviceName + ".json");
+        Serial.println(firebaseLink + deviceName + ".json");*/
         // Check succes of PUT
         if(httpCode_json > 0) {
           if(httpCode_json == HTTP_CODE_OK) {
@@ -138,9 +136,9 @@ void pushToFirebase(){
         int httpCode_battery = http.PUT(batLevel);
 
         //Debugging prints
-        Serial.println("PUT3: "+String(httpCode_battery));
+        /*Serial.println("PUT3: "+String(httpCode_battery));
         Serial.println("Battery Level: "+batLevel);
-        Serial.println(firebaseLink + batteryName + ".json");
+        Serial.println(firebaseLink + batteryName + ".json");*/
         // Check succes of PUT
         if(httpCode_battery > 0) {
           if(httpCode_battery == HTTP_CODE_OK) {
