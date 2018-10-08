@@ -20,10 +20,15 @@ int sleepTime = 5; // in seconds
 String firebaseLink = "http://krookfirebase.barkr.uk/";
 String deviceName = "ESP32";
 /* Wifi settings */
+//Krook
 /*char ssid[] = "***REMOVED***";
 char password[] = "***REMOVED***";*/
-char ssid[] = "Nerdlab";
-char password[] = "***REMOVED***";
+//Nerdlab
+/*char ssid[] = "Nerdlab";
+char password[] = "***REMOVED***";*/
+//Private
+char ssid[] = "WiFi-2.4-E4003;
+char password[] = "JasperJasmijnRonaldRaven";
 
 BLEScan* pBLEScan = BLEDevice::getScan(); 
 WiFiMulti wifiMulti;
