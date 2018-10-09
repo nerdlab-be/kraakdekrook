@@ -1,0 +1,45 @@
+Data wall
+level: 0 x: 974.0799999999999, y: 73.34905660377358
+
+Ingang
+level: 0 x: 1514.8799999999999, y: 173.5849056603774
+
+Kinderafdeling luisterboeken
+level: -1, x: 170.88, y: 229.4811320754717
+
+
+Kinderafdeling De kleine prins - Antoine de st. Exupéry
+level: -1, x: 176.64, y: 128.77358490566039
+
+Kinderafdeling André het astronautje op reis naar de planeten
+level: -1, x: 497.28000000000003, y: 101.88679245283018
+
+Jongerenafdeling Playstation
+level: -2 ,x: 385.28, y: 78.5377358490566
+
+Jongerenafdeling Een jaar in de ruimte
+level: -2 ,x: 385.28, y: 78.5377358490566
+
+Jongerenafdeling Het uur nul
+level: -2, x: 359.03999999999996, y: 81.83962264150944
+
+Piano
+level: 1, x: 697.5999999999999, y: 103.77358490566039
+
+Bladmuziek Sex Pistols: Never mind the bollocks
+level: 1, x: 312.96000000000004, y: 186.7924528301887
+
+Spaans / Italiaans
+level: 1, x: 1374.72, y: 108.49056603773585
+
+Graphic novels / Largo Winch
+level: 1, x: 1693.44, y: 179.95283018867923
+
+Javascript
+level: 2, x: 1730.56, y: 138.91509433962264
+
+Reisgids Washington DC
+level: 2, x: 471.03999999999996, y: 134.19811320754715
+
+Uitzicht
+level: 3, x: 208, y: 123.34905660377358
