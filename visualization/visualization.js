@@ -175,7 +175,7 @@ const getLocation = beacons => {
 
 }
 
-db.ref('/').on('value', snapshot => {
+db.ref('/sensors').on('value', snapshot => {
   const rawData = snapshot.val();
   console.log(rawData);
   const sensors = []

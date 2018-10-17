@@ -110,7 +110,7 @@ void pushToFirebase(){
       if((wifiMulti.run() == WL_CONNECTED)) {           // Check if WiFi is connected
         // Connect to URL for RSSI values - http://krookfirebase.barkr.uk/ufo-1.json
         
-        http.begin(firebaseLink + deviceName + ".json"); //HTTP
+        http.begin(firebaseLink + "sensor/" + deviceName + ".json"); //HTTP
         http.addHeader("Content-Type", "application/x-www-form-urlencoded");
         int httpCode_json = http.PUT(json);
         
@@ -131,7 +131,7 @@ void pushToFirebase(){
         
         // Connect to URL for battery level - http://krookfirebase.barkr.uk/batt-1.json
         
-        http.begin(firebaseLink + batteryName + ".json"); //HTTP
+        http.begin(firebaseLink + "battery/" + batteryName + ".json"); //HTTP
         http.addHeader("Content-Type", "application/x-www-form-urlencoded");
         int httpCode_battery = http.PUT(batLevel);
 
