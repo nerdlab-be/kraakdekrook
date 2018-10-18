@@ -202,3 +202,12 @@ db.ref('/sensors').on('value', snapshot => {
   });
   drawSensors(sensors);
 });
+
+let firstLoad = true;
+db.ref('/version').on('value', snapshot => {
+  if (firstLoad) {
+    firstLoad = false;
+  } else {
+    window.location.reload();
+  }
+});
