@@ -9,7 +9,8 @@
 #include <BLEScan.h>
 #include <BLEAdvertisedDevice.h>
 
-#define ANALOG_BatteryPower 36 //VP
+#define ANALOG_BatteryPower 26 //A0
+#define LED_BUILTIN 13
 
 /* Esp settings */
 int scanTime = 2; //in seconds 
@@ -22,6 +23,9 @@ String batteryName = "batt-1";
 // Krook WiFi
 char ssid[] = "iVisitor";
 char password[] = "WelcomeATimec";
+// Nerdlab WiFi
+/*char ssid[] = "Nerdlab";
+char password[] = "Ledlampje9000";*/
 /* end settings */
 
 
@@ -50,6 +54,7 @@ class MyAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
 void setup() {
     // Set serial console
     Serial.begin(115200);
+    pinMode(LED_BUILTIN, OUTPUT);
     
     // Set analogRead
     analogReadResolution(11);
@@ -65,8 +70,9 @@ void setup() {
     scan();
     batteryLevel();
     pushToFirebase();
-    
+    digitalWrite(LED_BUILTIN, HIGH);
     delay(sleepTime * 1000);
+    digitalWrite(LED_BUILTIN, LOW);
 
     // Restart programm
     ESP.restart();
@@ -110,7 +116,7 @@ void pushToFirebase(){
       if((wifiMulti.run() == WL_CONNECTED)) {           // Check if WiFi is connected
         // Connect to URL for RSSI values - http://krookfirebase.barkr.uk/ufo-1.json
         
-        http.begin(firebaseLink + "sensor/" + deviceName + ".json"); //HTTP
+        http.begin(firebaseLink + "sensors/" + deviceName + ".json"); //HTTP
         http.addHeader("Content-Type", "application/x-www-form-urlencoded");
         int httpCode_json = http.PUT(json);
         
