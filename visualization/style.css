@@ -2,11 +2,10 @@ html, body {
   margin: 0;
   width: 1920px;
   height: 3000px;
-
+  overflow: hidden;
 }
 #footer {
   background-image: url('footer.png');
-  background-color: black;
 }
 .row {
   display: block;
