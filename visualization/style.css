@@ -1,5 +1,8 @@
-body {
+html, body {
   margin: 0;
+  width: 1920px;
+  height: 3000px;
+  overflow: hidden;
 }
 
 .row {
