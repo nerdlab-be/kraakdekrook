@@ -124,22 +124,15 @@ const drawSensors = allSensors => {
 };
 
 d3.json('locations-parsed.json', data => {
-  beaconsByLevel = groupByLevel(data);
-  data.forEach(beacon => {
+  const flippedX = data.map(beacon => ({
+    ...beacon,
+    x: 1920 - beacon.x,
+  }))
+  beaconsByLevel = groupByLevel(flippedX);
+  flippedX.forEach(beacon => {
     beaconById[beacon.id] = beacon;
   });
   drawLevels(beaconsByLevel);
-  // drawSensors(sensors);
-  // setInterval(
-  //   () => {
-  //     sensors[0].x = Math.random() * 600;
-  //     sensors[0].y = Math.random() * 150;
-  //     const proposedLevel = sensors[0].level + Math.round(Math.random() * 2 - 1);
-  //     sensors[0].level = Math.max(-2, Math.min(3, proposedLevel));
-  //     drawSensors(sensors);
-  //   },
-  //   1000
-  // );
 });
 
 const getCentroid = coords => coords.reduce((acc, c) => ({
