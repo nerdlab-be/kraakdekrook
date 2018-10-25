@@ -10,15 +10,15 @@
 #include <BLEAdvertisedDevice.h>
 
 #define ANALOG_BatteryPower 26 //A0
-#define LED_BUILTIN 13
+#define LED_BUILTIN 2 //13
 
 /* Esp settings */
 int scanTime = 2; //in seconds 
 int sleepTime = 5; // in seconds
 /* backend settings */ 
 String firebaseLink = "http://krookfirebase.barkr.uk/";
-String deviceName = "ufo-1";
-String batteryName = "batt-1";
+String deviceName = "ufo-3";
+String batteryName = "batt-3";
 /* Wifi settings */
 // Krook WiFi
 char ssid[] = "iVisitor";
@@ -109,7 +109,7 @@ void batteryLevel() {
 
   // Convert battery level from digital to analog signal and make string
   batteryLevel_Analog=map(batteryLevel_Digital,0,2047,0,35)/10.0;//+randomValue;
-  batLevel="{\"Level_bat1\":"+String(batteryLevel_Analog)+"}";
+  batLevel="{\"Level_bat3\":"+String(batteryLevel_Analog)+"}";
 }
 
 void pushToFirebase(){
