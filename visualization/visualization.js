@@ -103,8 +103,6 @@ const drawSensors = allSensors => {
       .attr("y", d => d.y)
       .attr('width', 0)
       .attr('height', 0)
-      // .style('fill', '#f00')
-      // .attr('r', 0)
       .transition()
       .attr("x", d => d.x - ufoSize / 2)
       .attr("y", d => d.y - ufoSize / 2)
@@ -135,63 +133,12 @@ d3.json('locations-parsed.json', data => {
   drawLevels(beaconsByLevel);
 });
 
-const getCentroid = coords => coords.reduce((acc, c) => ({
-  x: acc.x + c.x / coords.length,
-  y: acc.y + c.y / coords.length,
-}), { x: 0, y: 0 });
-
-
-const getLocation = beacons => {
-  // majority vote on level: if we get 2 beacons on the 1st floor and 1 on the
-  // 2nd floor, assume the sensor is on the 1st floor
-  let bestCount = 0;
-  let bestLevel = 0;
-  let counts = {};
-  const filteredBeacons = beacons
-    .sort((a, b) => b.rssi - a.rssi)
-    .slice(0, 3)
-  filteredBeacons.forEach(beacon => {
-    let level = beaconById[beacon.krookid].level;
-    counts[level] = (counts[level] || 0) + 1;
-    if (counts[level] > bestCount) {
-      bestCount = counts[level];
-      bestLevel = level;
-    }
-  });
-  const coords = getCentroid(filteredBeacons.map(b => beaconById[b.krookid]));
-  return {
-    x: coords.x,
-    y: coords.y,
-    level: bestLevel,
-    beacons: beacons,
-  };
-
-}
-
-db.ref('/sensors').on('value', snapshot => {
+db.ref('/sensors-processed').on('value', snapshot => {
   const rawData = snapshot.val();
-  console.log(rawData);
   const sensors = []
   Object.keys(rawData).forEach(sensorId => {
     const sensor = rawData[sensorId];
-    const beacons = Object.keys(sensor).map(hexId => {
-      const beaconData = sensor[hexId];
-      return {
-        rssi: beaconData.RSSI,
-        krookid: parseInt(hexId, 16),
-      }
-    });
-    const sensorLocation = getLocation(beacons);
-    const processedData = {
-      id: sensorId,
-      name: sensorId,
-      level: sensorLocation.level,
-      x: sensorLocation.x,
-      y: sensorLocation.y,
-      beacons: beacons,
-    }
-    sensors.push(processedData);
-    console.log('loc', sensorLocation);
+    sensors.push(sensor);
   });
   drawSensors(sensors);
 });
