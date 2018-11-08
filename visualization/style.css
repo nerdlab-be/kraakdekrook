@@ -74,3 +74,34 @@ video#bgvid {
     top: 20px;
     left: 30px;
   }
+
+.textballoon {
+    position: relative;
+    padding-left: 50px;
+    left: 50px;
+    width: 1800px;
+    height: auto;
+    border: 20px solid transparent;
+    border-width: thick;
+    border-color: #00aabb;
+    background: rgba(255,255,255, 0.65);
+    border-radius: .4em;
+    color: rgba(0,0,0);
+    font-size: 75px;
+  }
+
+  .textballoon:after {
+    content: '';
+    position: absolute;
+    left: 0%;
+    top: 50%;
+    width: 0;
+    height: 0;
+    border: 40px solid transparent;
+    border-right-color: #00aabb;
+    border-left: 0;
+    border-bottom: 0;
+    margin-top: -20px;
+    margin-left: -40px;
+  }
+  
