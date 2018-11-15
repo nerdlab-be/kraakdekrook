@@ -21,6 +21,7 @@ int sleepTime = 5; // in seconds
 String firebaseLink = "http://krookfirebase.barkr.uk/";
 String deviceName;
 String batteryName;
+bool jsonisValid;
 
 /* Wifi settings */
 // Krook WiFi
@@ -39,6 +40,7 @@ String json;
 int batteryLevel_Digital=0;
 float batteryLevel_Analog=0.0;
 String batLevel;
+String requestTimestamp;
 
 class MyAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
     void onResult(BLEAdvertisedDevice advertisedDevice) {
@@ -75,9 +77,22 @@ void setup() {
     pBLEScan->setActiveScan(true);
 
     // Measure and send to Firebase
+    jsonisValid=true;
     scan();
     batteryLevel();
-    pushToFirebase();
+    if((wifiMulti.run() == WL_CONNECTED)) {           // Check if WiFi is connected
+    // Connect to URL for RSSI values - http://krookfirebase.barkr.uk/ufo-1.json
+    
+      if (jsonisValid) {
+        pushToFirebase_json();
+      }
+      else {
+        Serial.println("Invalid JSON");
+      }
+      pushToFirebase_battery();
+
+    }
+      
     digitalWrite(LED_BUILTIN, HIGH);
     delay(sleepTime * 1000);
     digitalWrite(LED_BUILTIN, LOW);
@@ -94,13 +109,16 @@ void scan() {
   BLEScanResults foundDevices = pBLEScan->start(scanTime);  
   json = json.substring(0, json.length() - 1);
   json = json + "}";
-  if (json == "}") {
-    json="{}";
-  }
-  // Remove when done testing
+
+    // Remove when done testing
   /*int getal1=random(-100,0);
   int getal2=random(-100,0);
   json="{\"02\": {\"RSSI\":"+String(getal1)+"},\"6d\":{\"RSSI\" :"+String(getal2)+"}}";*/
+  
+  if (json.equals("}")) {
+    jsonisValid=false;
+  }
+
   
   delete pBLEScan;
   pBLEScan = NULL;
@@ -120,12 +138,11 @@ void batteryLevel() {
   batteryLevel_Analog=map(batteryLevel_Digital,0,2047,0,36)/10.0;//+randomValue;
   batLevel=String(batteryLevel_Analog);
   Serial.println(batLevel);
+
+  requestTimestamp=String(random(100));
 }
 
-void pushToFirebase(){
-      if((wifiMulti.run() == WL_CONNECTED)) {           // Check if WiFi is connected
-        // Connect to URL for RSSI values - http://krookfirebase.barkr.uk/ufo-1.json
-                
+void pushToFirebase_json(){                
         http.begin(firebaseLink + "sensors/" + deviceName + ".json"); //HTTP
         http.addHeader("Content-Type", "application/x-www-form-urlencoded");
         int httpCode_json = http.PUT(json);
@@ -143,7 +160,10 @@ void pushToFirebase(){
               Serial.printf("PUT RSSI failed, error: %s\n", http.errorToString(httpCode_json).c_str());
         }
         http.end();       // end connection with http://krookfirebase.barkr.uk/ufo-1.json
-        
+
+}
+
+void pushToFirebase_battery(){
         // Connect to URL for battery level - http://krookfirebase.barkr.uk/batt-1.json
         
         http.begin(firebaseLink + "battery/"+deviceName+".json"); //HTTP
@@ -159,8 +179,26 @@ void pushToFirebase(){
         }else {
               Serial.printf("PUT batteryLevel failed, error: %s\n", http.errorToString(httpCode_battery).c_str());
         }
+        
         http.end();       // end connection with http://krookfirebase.barkr.uk/batt-1.json
-      }
+
+        // Connect to URL for battery level - http://krookfirebase.barkr.uk/batt-1.json
+        
+        http.begin(firebaseLink + "TimeStamp/"+deviceName+".json"); //HTTP
+        http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+        int httpCode_timestamp = http.PUT(requestTimestamp);
+
+        // Check succes of PUT
+        if(httpCode_battery > 0) {
+          if(httpCode_timestamp == HTTP_CODE_OK) {
+                  String payload = http.getString();
+                  Serial.println(payload);
+          }
+        }else {
+              Serial.printf("PUT batteryLevel failed, error: %s\n", http.errorToString(httpCode_battery).c_str());
+        }
+        http.end();       // end connection with http://krookfirebase.barkr.uk/batt-1.json
+      
 }
 
 String getMacAddress(){
@@ -177,7 +215,7 @@ int readLightSensor(){
   //adc1_config_channel_atten(ANALOG_BatteryPower,ADC_ATTEN_DB_11);  //ADC_ATTEN_DB_11 = 0-3,6V
   return analogRead( ANALOG_BatteryPower ); //Read analog
 }
-      
+    
 
 void loop() {
     /* no need for loop */
