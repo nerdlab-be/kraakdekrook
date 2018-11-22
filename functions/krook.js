@@ -3,7 +3,7 @@ admin.initializeApp();
 let _beacons = null;
 const beaconsRef = admin.database().ref('/beacons');
 
-const getBeacons = async () => {
+const getBeacons = async() => {
   if (_beacons !== null) {
     return _beacons;
   }
@@ -42,6 +42,11 @@ exports.getLocation = async beacons => {
     level: bestLevel,
     beacons: beacons,
   };
+}
+
+exports.distance = (a, b) => {
+  const euclid = Math.sqrt((b.x - a.x) ** 2 + (b.y - a.y) ** 2);
+  return euclid + 10000 * (b.level - a.level) ** 2
 }
 
 exports.admin = admin;
