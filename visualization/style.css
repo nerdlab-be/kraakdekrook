@@ -78,16 +78,17 @@ video#bgvid {
 .textballoon {
     position: relative;
     padding-left: 50px;
-    left: 50px;
-    width: 1800px;
+    left: 10px;
+    width: 1300px;
     height: auto;
     border: 20px solid transparent;
     border-width: thick;
-    border-color: #00aabb;
+    border-color: rgba(255, 0, 200, 0.45);
     background: rgba(255,255,255, 0.65);
     border-radius: .4em;
     color: rgba(0,0,0);
-    font-size: 75px;
+    font-size: 60px;
+    margin-bottom: 20px;
   }
 
   .textballoon:after {
@@ -98,10 +99,18 @@ video#bgvid {
     width: 0;
     height: 0;
     border: 40px solid transparent;
-    border-right-color: #00aabb;
+    border-right-color: rgba(255, 0, 200, 0.65);
     border-left: 0;
     border-bottom: 0;
     margin-top: -20px;
     margin-left: -40px;
+  }
+
+  .rotateUFO {
+    -webkit-transform: rotate(20deg);
+    -moz-transform: rotate(20deg);
+    -o-transform: rotate(20deg);
+    -ms-transform: rotate(20deg);
+    transform: rotate(20deg);
   }
   
