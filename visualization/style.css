@@ -65,3 +65,18 @@ video#bgvid {
     top: 20px;
     left: 30px;
   }
+
+.goal {
+  fill: transparent;
+  stroke: aquamarine;
+  stroke-width: 2px;
+}
+
+.goal-message {
+  position: fixed;
+  top: 50px;
+  right: 50px;
+  width: 900;
+  font-size: 24px;
+  color: aquamarine;
+}
