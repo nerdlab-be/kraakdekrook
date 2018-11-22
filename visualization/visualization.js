@@ -170,8 +170,15 @@ db.ref('/sensors-processed').on('value', snapshot => {
 
 db.ref('/goal').on('value', snapshot => {
   const goal = snapshot.val();
-  document.querySelector('.goal-message').innerHTML = goal.objectiveText;
+  const element=document.querySelector('#alienSays');
+  element.innerHTML = goal.objectiveText;
   drawGoal(goal);
+  if (goal) {
+    element.classList.remove("empty");
+  }
+  else {
+    element.classList.add("empty");
+  }
 });
 
 let firstLoad = true;
