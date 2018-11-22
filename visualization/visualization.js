@@ -63,6 +63,7 @@ const drawLevels = beaconsByLevel => {
     
       // prepare a layer for the sensors, but don't do anything with it just yet
       svg.append('g').attr('class', 'sensors');
+      svg.append('g').attr('class', 'goals');
   });
 };
 
@@ -121,6 +122,30 @@ const drawSensors = allSensors => {
   })
 };
 
+const drawGoal = goal => {
+  console.log(goal);
+  const svg = svgForLevel(goal.location.level);
+  const goalCircles = svg.select('.goals');
+  const updatedGoalCircles = goalCircles
+    .selectAll('circle.goal')
+    .data([goal], s => s.objectiveText);
+  
+  updatedGoalCircles.transition()
+    .attr('cx', g => g.location.x)
+    .attr('cy', g => g.location.y)
+    .attr('r', g => g.radius)
+  
+  updatedGoalCircles.enter()
+    .append('circle')
+    .attr('class', 'goal')
+    .attr('cx', g => g.location.x)
+    .attr('cy', g => g.location.y)
+    .attr('r', g => g.radius)
+  
+  updatedGoalCircles.exit()
+    .remove(s => s.objectiveText)
+};
+
 d3.json('locations-parsed.json', data => {
   const flippedX = data.map(beacon => ({
     ...beacon,
@@ -141,6 +166,12 @@ db.ref('/sensors-processed').on('value', snapshot => {
     sensors.push(sensor);
   });
   drawSensors(sensors);
+});
+
+db.ref('/goal').on('value', snapshot => {
+  const goal = snapshot.val();
+  document.querySelector('.goal-message').innerHTML = goal.objectiveText;
+  drawGoal(goal);
 });
 
 let firstLoad = true;
