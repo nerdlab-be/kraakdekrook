@@ -15,8 +15,7 @@ const db = firebase.database();
 // level -> list of beacons
 let beaconsByLevel = {};
 const beaconById = {};
-
-
+const debugSensorRef = db.ref('/sensors/debug');
 const linkLengthSquared = (source, target) => {
   const dx = target[0] - source[0];
   const dy = target[1] - source[1];
@@ -64,6 +63,19 @@ const drawLevels = beaconsByLevel => {
       // prepare a layer for the sensors, but don't do anything with it just yet
       svg.append('g').attr('class', 'sensors');
       svg.append('g').attr('class', 'goals');
+      svg.on('click', function onSvgClick() {
+        const sensors = beaconsByLevel[level];
+        const [x, y] = d3.mouse(this);
+        const closestSensors = sensors
+          .sort((a, b) => (a.x - x) ** 2 + (a.y - y) ** 2 - (b.x - x) ** 2 - (b.y - y) ** 2)
+          .slice(0, 3);
+        const debugSensorObject = {};
+        closestSensors.forEach(s => {
+          debugSensorObject[s.id.toString(16)] = { RSSI: -10 };
+        });
+        console.log('click', d3.mouse(this), debugSensorObject);
+        debugSensorRef.set(debugSensorObject);
+      });
   });
 };
 
@@ -149,7 +161,7 @@ const drawGoal = goal => {
 d3.json('locations-parsed.json', data => {
   const flippedX = data.map(beacon => ({
     ...beacon,
-    x: 1920 - beacon.x,
+    x: beacon.x,
   }))
   beaconsByLevel = groupByLevel(flippedX);
   flippedX.forEach(beacon => {

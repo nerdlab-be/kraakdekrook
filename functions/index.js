@@ -30,18 +30,20 @@ const pickGoal = async () => {
 const updateGoals = async sensor => {
   const goal = await getGoal();
   if (!goal) {
-    await pickGoal();
+    return pickGoal();
   }
-  console.log('distance', distance(sensor, goal), sensor, goal);
-  if (distance(sensor, goal.location) <= goal.radius) {
-    goalRef.set({
+  if (!goal.reached && distance(sensor, goal.location) <= goal.radius) {
+    return goalRef.set({
       ...goal,
       reached: new Date().toISOString(),
     })
-    await pickGoal();
   }
+  
   if (goal.reached) {
-    /// lol
+    const millisecondsSinceReached = new Date() - new Date(goal.reached);
+    if (millisecondsSinceReached > 10000) {
+      return pickGoal();
+    }
   }
 };
 
@@ -50,6 +52,7 @@ exports.processSensor = functions.database.ref('/sensors/{id}')
     // Grab the current value of what was written to the Realtime Database.
     const sensor = snapshot.after.val();
     const sensorId = context.params.id;
+    console.log({ sensor, sensorId });
     const beacons = Object.keys(sensor).map(hexId => {
       const beaconData = sensor[hexId];
       return {

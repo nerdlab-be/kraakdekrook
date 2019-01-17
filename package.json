@@ -21,6 +21,7 @@
     "de-krook-beacons": "^1.0.2",
     "express": "^4.16.4",
     "firebase-admin": "^6.0.0",
+    "firebase-functions": "^2.1.0",
     "serve-static": "^1.13.2"
   }
 }

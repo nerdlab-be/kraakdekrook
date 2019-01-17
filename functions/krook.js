@@ -27,7 +27,9 @@ exports.getLocation = async beacons => {
   const filteredBeacons = beacons
     .sort((a, b) => b.rssi - a.rssi)
     .slice(0, 3)
+  console.log({ filteredBeacons, beacons })
   filteredBeacons.forEach(beacon => {
+    console.log(beacon);
     let level = beaconById[beacon.krookid].level;
     counts[level] = (counts[level] || 0) + 1;
     if (counts[level] > bestCount) {
@@ -45,8 +47,10 @@ exports.getLocation = async beacons => {
 }
 
 exports.distance = (a, b) => {
+  console.log('distance inside', {a, b})
   const euclid = Math.sqrt((b.x - a.x) ** 2 + (b.y - a.y) ** 2);
-  return euclid + 10000 * (b.level - a.level) ** 2
+  console.log(euclid + 10000 * (b.level - a.level) ** 2);
+  return euclid + 10000 * (b.level - a.level) ** 2;
 }
 
 exports.admin = admin;
