@@ -9,6 +9,7 @@
 #include <BLEUtils.h>
 #include <BLEScan.h>
 #include <BLEAdvertisedDevice.h>
+#include "wifisettings.h"
 
 #define ANALOG_BatteryPower 34 //A2
 #define LED_BUILTIN 13
@@ -23,11 +24,6 @@ String deviceName;
 String batteryName;
 bool jsonisValid;
 
-/* Wifi settings */
-// Nerdlab WiFi
-char ssid[] = "Nerdlab";
-char password[] = "***REMOVED***";
-/* end settings */
 
 /*Init*/
 BLEScan* pBLEScan = BLEDevice::getScan(); 
