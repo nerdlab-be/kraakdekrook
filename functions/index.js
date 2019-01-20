@@ -1,8 +1,10 @@
 const functions = require('firebase-functions');
+const express = require('express');
+const cors = require('cors');
 const { getLocation, admin, distance } = require('./krook');
 const pois = require('./pois');
 
-const processedUsersRef = admin.database().ref('/sensors-processed');
+const processedSensorsRef = admin.database().ref('/sensors-processed');
 const goalRef = admin.database().ref('/goal');
 const availableGoalsRef = admin.database().ref('/availableGoals');
 
@@ -58,7 +60,7 @@ exports.processSensor = functions.database.ref('/sensors/{id}')
       return {
         rssi: beaconData.RSSI,
         krookid: parseInt(hexId, 16),
-      }
+      };
     });
     const sensorLocation = await getLocation(beacons);
     const processedData = {
@@ -72,6 +74,20 @@ exports.processSensor = functions.database.ref('/sensors/{id}')
     // You must return a Promise when performing asynchronous tasks inside a Functions such as
     // writing to the Firebase Realtime Database.
     // Setting an "uppercase" sibling in the Realtime Database returns a Promise.
-    return processedUsersRef.child(context.params.id).set(processedData);
+    return processedSensorsRef.child(context.params.id).set(processedData);
 
   });
+
+const app = express();
+// Automatically allow cross-origin requests
+app.use(cors({ origin: true }));
+// build multiple CRUD interfaces:
+app.put('/:sensorId', async (req, res) => {
+  await processedSensorsRef.child(req.params.sensorId).update({
+    lastHeartbeat: new Date().toISOString(),
+    batteryVoltage: req.body.battery,
+  });
+  res.send("5000000");
+});
+
+exports.heartbeat = functions.https.onRequest(app);
