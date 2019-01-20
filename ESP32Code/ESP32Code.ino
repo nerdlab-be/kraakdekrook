@@ -24,9 +24,6 @@ String batteryName;
 bool jsonisValid;
 
 /* Wifi settings */
-// Krook WiFi
-/*char ssid[] = "***REMOVED***";
-char password[] = "***REMOVED***";*/
 // Nerdlab WiFi
 char ssid[] = "Nerdlab";
 char password[] = "***REMOVED***";
