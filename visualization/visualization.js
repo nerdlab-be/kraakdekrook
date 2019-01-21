@@ -114,7 +114,7 @@ const drawSensors = allSensors => {
 
     updatedSensorGraphics.enter()
       .append('image')
-      .attr("xlink:href", "ufo.svg?yellow")
+      .attr("xlink:href", "ufo.svg?v=2")
       .attr('class', 'sensor')
       .attr("x", d => xValue(d.x))
       .attr("y", d => yValue(d.y))
@@ -125,7 +125,7 @@ const drawSensors = allSensors => {
       .attr("y", d => yValue(d.y - ufoSize / 2))
       .attr('width', ufoSize)
       .attr('height', ufoSize)
-      .attr('transform', d => 'rotate('+ Math.floor((Math.random() * 60) -30) +', ' +  d.x + ', ' + d.y+ ')');
+      .attr('transform', d => 'rotate('+ Math.floor((Math.random() * 60) -30) +', ' +  xValue(d.x) + ', ' + yValue(d.y)+ ')');
 
     updatedSensorGraphics.exit()
       .attr("x", d => xValue(d.x - ufoSize / 2))
@@ -160,7 +160,8 @@ const drawGoal = goal => {
     .attr('r', g => g.radius)
   
   updatedGoalCircles.exit()
-    .remove(s => s.objectiveText)
+      .remove()
+  });
 };
 
 d3.json('locations-parsed.json', data => {
