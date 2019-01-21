@@ -67,6 +67,7 @@ video#bgvid {
 
 .level {
   position: relative;
+  height: 300px;
 }
 
   .level-indicator {
