@@ -9,6 +9,7 @@
 #include <BLEUtils.h>
 #include <BLEScan.h>
 #include <BLEAdvertisedDevice.h>
+#include "wifisettings.h"
 
 #define ANALOG_BatteryPower 34 //A2
 #define LED_BUILTIN 13
@@ -23,14 +24,6 @@ String deviceName;
 String batteryName;
 bool jsonisValid;
 
-/* Wifi settings */
-// Krook WiFi
-/*char ssid[] = "iVisitor";
-char password[] = "WelcomeATimec";*/
-// Nerdlab WiFi
-char ssid[] = "Nerdlab";
-char password[] = "Ledlampje9000";
-/* end settings */
 
 /*Init*/
 BLEScan* pBLEScan = BLEDevice::getScan(); 
@@ -80,25 +73,32 @@ void setup() {
     jsonisValid=true;
     scan();
     batteryLevel();
+    int microsecondsToSleep = 0;
     if((wifiMulti.run() == WL_CONNECTED)) {           // Check if WiFi is connected
     // Connect to URL for RSSI values - http://krookfirebase.barkr.uk/ufo-1.json
-    
+      Serial.println("Sending heartbeat");
+      microsecondsToSleep = sendHeartbeat();
       if (jsonisValid) {
         pushToFirebase_json();
       }
       else {
         Serial.println("Invalid JSON");
       }
-      pushToFirebase_battery();
-
     }
       
     digitalWrite(LED_BUILTIN, HIGH);
     delay(sleepTime * 1000);
     digitalWrite(LED_BUILTIN, LOW);
 
-    // Restart programm
-    ESP.restart();
+    if (microsecondsToSleep) {
+      Serial.printf("Sleeping for %d microseconds\n", microsecondsToSleep);
+      delay(500);
+      esp_sleep_enable_timer_wakeup(microsecondsToSleep);
+      esp_deep_sleep_start();
+    } else {
+      Serial.println("No sleep requested, restarting");
+      ESP.restart();
+    }
 }
 
 void scan() {
@@ -163,12 +163,29 @@ void pushToFirebase_json(){
 
 }
 
+int sendHeartbeat() {
+  http.begin(firebaseLink + "functions/heartbeat/" + deviceName);
+  http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+  int statusCode = http.PUT("battery=" + batLevel);
+  if (statusCode > 0) {
+    // HTTP call succeeded
+    if (statusCode == HTTP_CODE_OK) {
+      String payload = http.getString();
+      return payload.toInt();
+    } else {
+      Serial.printf("heartbeat returned HTTP %d", statusCode);
+    }
+  } else {
+    Serial.printf("PUT heartbeat failed, error: %s\n", http.errorToString(statusCode).c_str());
+  }
+}
+
 void pushToFirebase_battery(){
         // Connect to URL for battery level - http://krookfirebase.barkr.uk/batt-1.json
         
         http.begin(firebaseLink + "battery/"+deviceName+".json"); //HTTP
         http.addHeader("Content-Type", "application/x-www-form-urlencoded");
-        int httpCode_battery = http.PUT(batLevel);
+        int httpCode_battery = http.PUT("battery=" + batLevel);
 
         // Check succes of PUT
         if(httpCode_battery > 0) {
