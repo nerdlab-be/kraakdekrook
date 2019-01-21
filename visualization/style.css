@@ -114,6 +114,9 @@ video#bgvid {
   }
 
   .rotateUFO {
+    width: 150px;
+    padding-left: 200px; 
+    padding-right: 50px;
     -webkit-transform: rotate(20deg);
     -moz-transform: rotate(20deg);
     -o-transform: rotate(20deg);
