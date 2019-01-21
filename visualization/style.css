@@ -86,12 +86,12 @@ video#bgvid {
     height: auto;
     border: 20px solid transparent;
     border-width: thick;
-    border-color: rgba(255, 0, 0, 0.45);
+    border-color: rgba(255, 255, 255, 0.45);
     background: rgba(255, 255, 255, 0.849);
     border-radius: .4em;
     color: rgba(0,0,0);
     font-size: 60px;
-    margin-bottom: 20px;
+    margin-bottom: 120px;
   }
 
   .textballoon:after {
@@ -102,7 +102,7 @@ video#bgvid {
     width: 0;
     height: 0;
     border: 40px solid transparent;
-    border-right-color: rgba(255, 0, 0, 0.65);
+    border-right-color: rgba(255, 255, 255, 0.65);
     border-left: 0;
     border-bottom: 0;
     margin-top: -20px;
