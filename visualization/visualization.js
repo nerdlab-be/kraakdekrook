@@ -123,12 +123,9 @@ const drawSensors = allSensors => {
       .attr("y", d => d.y - ufoSize / 2)
       .attr('width', ufoSize)
       .attr('height', ufoSize)
-      //.attr("-webkit-transform-origin" , "50% 50%")
-        
-      //.attr("transform-origin" , "50% 50%")
       
-      //.attr("-moz-transform", 30)
-      //.attr( "-webkit-transform" , 30)
+      
+      .attr('transform', d => 'rotate('+ Math.floor((Math.random() * 60) -30) +', ' +  d.x + ', ' + d.y+ ')');
       
     
     updatedSensorGraphics.exit()
