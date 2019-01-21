@@ -22,8 +22,6 @@ const linkLengthSquared = (source, target) => {
   return dx * dx + dy * dy;
 };
 
-const xValue = x => 1920 - x;
-const yValue = y => y;
 const svgForLevel = level => d3.select((`#svg_${level}`).replace('-', '_'));
 
 const drawLevels = beaconsByLevel => {
@@ -44,10 +42,10 @@ const drawLevels = beaconsByLevel => {
       .data(links)
       .enter()
         .append("line")
-        .attr("x1", d => xValue(d.source[0]))
-        .attr("y1", d => yValue(d.source[1]))
-        .attr("x2", d => xValue(d.target[0]))
-        .attr("y2", d => yValue(d.target[1]));
+        .attr("x1", d => d.source[0])
+        .attr("y1", d => d.source[1])
+        .attr("x2", d => d.target[0])
+        .attr("y2", d => d.target[1]);
     
     // draw beacons
     svg.append("g")
@@ -57,8 +55,8 @@ const drawLevels = beaconsByLevel => {
       .enter()
         .append("circle")
         .attr("r", 5)
-        .attr("cx", d => xValue(d.x))
-        .attr("cy", d => yValue(d.y))
+        .attr("cx", d => d.x)
+        .attr("cy", d => d.y)
         // useful debugging tool: log beacon object to console on click
         .on('click', d => console.log(d) )
     
@@ -69,7 +67,7 @@ const drawLevels = beaconsByLevel => {
         const sensors = beaconsByLevel[level];
         const [x, y] = d3.mouse(this);
         const closestSensors = sensors
-          .sort((a, b) => (a.x - xValue(x)) ** 2 + (a.y - yValue(y)) ** 2 - (b.x - xValue(x)) ** 2 - (b.y - yValue(y)) ** 2)
+          .sort((a, b) => (a.x - x) ** 2 + (a.y - y) ** 2 - (b.x - x) ** 2 - (b.y - y) ** 2)
           .slice(0, 3);
         const debugSensorObject = {};
         closestSensors.forEach(s => {
@@ -107,40 +105,34 @@ const drawSensors = allSensors => {
       .data(sensors, s => s.id)
       
     updatedSensorGraphics.transition()
-      .attr("x", d => xValue(d.x))
-      .attr("y", d => yValue(d.y))
+      .attr("x", d => d.x)
+      .attr("y", d => d.y)
 
     updatedSensorGraphics.enter()
       .append('image')
       .attr("xlink:href", "ufo.svg?yellow")
       .attr('class', 'sensor')
-      .attr("x", d => xValue(d.x))
-      .attr("y", d => yValue(d.y))
+      .attr("x", d => d.x)
+      .attr("y", d => d.y)
       .attr('width', 0)
       .attr('height', 0)
       .transition()
-      .attr("x", d => xValue(d.x - ufoSize / 2))
-      .attr("y", d => yValue(d.y - ufoSize / 2))
+      .attr("x", d => d.x - ufoSize / 2)
+      .attr("y", d => d.y - ufoSize / 2)
       .attr('width', ufoSize)
-<<<<<<< HEAD
       .attr('height', ufoSize)
       
-      
-      
-=======
-      .attr('height', ufoSize);
->>>>>>> 8959954bc6cb7ae4995500a0b5b26576d7c8b31c
     
     updatedSensorGraphics.exit()
-      .attr("x", d => xValue(d.x - ufoSize / 2))
-      .attr("y", d => yValue(d.y - ufoSize / 2))
+      .attr("x", d => {console.log(d); return d.x - ufoSize / 2})
+      .attr("y", d => d.y - ufoSize / 2)
       .transition()
       .attr('width', 0)
       .attr('height', 0)
-      .attr("x", d => xValue(d.x))
-      .attr("y", d => yValue(d.y))
+      .attr("x", d => d.x)
+      .attr("y", d => d.y)
       .remove()
-  });
+  })
 };
 
 const drawGoal = goal => {
@@ -152,15 +144,15 @@ const drawGoal = goal => {
     .data([goal], s => s.objectiveText);
   
   updatedGoalCircles.transition()
-    .attr('cx', g => xValue(g.location.x))
-    .attr('cy', g => yValue(g.location.y))
+    .attr('cx', g => g.location.x)
+    .attr('cy', g => g.location.y)
     .attr('r', g => g.radius)
   
   updatedGoalCircles.enter()
     .append('circle')
     .attr('class', 'goal')
-    .attr('cx', g => xValue(g.location.x))
-    .attr('cy', g => yValue(g.location.y))
+    .attr('cx', g => g.location.x)
+    .attr('cy', g => g.location.y)
     .attr('r', g => g.radius)
   
   updatedGoalCircles.exit()
