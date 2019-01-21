@@ -155,3 +155,26 @@ video#bgvid {
 #svg_3{
   margin-top: 25px;
 }
+.winner {
+  z-index: 100;
+  overflow: visible;
+  animation-name: victory;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+@keyframes victory {
+  from {
+    height: 250px;
+    transform-origin: center center;
+    transform: rotate(20deg);
+  }
+
+  to {
+    height: 500px;
+    transform-origin: center center;
+    transform: rotate(-20deg);
+  }
+}
+

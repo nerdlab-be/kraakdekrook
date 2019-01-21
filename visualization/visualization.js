@@ -18,6 +18,7 @@ const db = firebase.database();
 let beaconsByLevel = {};
 const beaconById = {};
 const debugSensorRef = db.ref('/sensors/debug');
+let currentGoal;
 const linkLengthSquared = (source, target) => {
   const dx = target[0] - source[0];
   const dy = target[1] - source[1];
@@ -98,6 +99,25 @@ const groupByLevel = objects => {
   return objectsByLevel;
 }
 
+const rocketReached = (sensor) => {
+  if (!currentGoal) {
+    return "sensor";
+  }
+  const euclid = Math.sqrt((sensor.x - currentGoal.location.x) ** 2 + (sensor.y - currentGoal.location.y) ** 2);
+  console.log(euclid + 10000 * (sensor.level - currentGoal.location.level) ** 2);
+  const distance = euclid + 10000 * (sensor.level - currentGoal.location.level) ** 2;
+  const tresholdReached = (distance <= 75);
+  console.log(sensor);
+  if (tresholdReached) {
+    console.log("reached");
+    return "sensor winner";
+  }
+  else {
+    console.log("not reached");
+    return "sensor";
+  }
+}
+
 const drawSensors = allSensors => {
   const sensorsByLevel = groupByLevel(allSensors);
   levels.forEach(level => {
@@ -107,15 +127,17 @@ const drawSensors = allSensors => {
     const updatedSensorGraphics = sensorGraphics
       .selectAll('image.sensor')
       .data(sensors, s => s.id)
+       
       
     updatedSensorGraphics.transition()
-      .attr("x", d => xValue(d.x))
-      .attr("y", d => yValue(d.y))
+      .attr("x", d => d.x)
+      .attr("y", d => d.y)
+      .attr('class', rocketReached)      
 
     updatedSensorGraphics.enter()
       .append('image')
+      .attr('class', rocketReached)
       .attr("xlink:href", "ufo.svg?yellow")
-      .attr('class', 'sensor')
       .attr("x", d => xValue(d.x))
       .attr("y", d => yValue(d.y))
       .attr('width', 0)
@@ -187,6 +209,7 @@ db.ref('/sensors-processed').on('value', snapshot => {
 
 db.ref('/goal').on('value', snapshot => {
   const goal = snapshot.val();
+  currentGoal = goal;
   const element=document.querySelector('#alienSays');
   element.innerHTML = goal.objectiveText;
   drawGoal(goal);
@@ -195,6 +218,12 @@ db.ref('/goal').on('value', snapshot => {
   }
   else {
     element.classList.add("empty");
+  }
+  if (goal.reached) {
+    console.log("Reached goal!");
+  }
+  else {
+    console.log("Nope, not reached");
   }
 });
 
