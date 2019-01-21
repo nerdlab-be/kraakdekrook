@@ -138,20 +138,18 @@ video#bgvid {
   color: white;
 }
 
-#lvl_0{
-  padding-bottom: 50px;
-}
+
 #svg_0{
-  padding-left: 50px;
+  padding-left: -50px;
 }
 
 #svg__1{
-  padding-left: 200px;
+  padding-left: -200px;
   margin-top: -25px;
 }
 
 #svg_2{
-  margin-left: -50px;
+  margin-left: 50px;
 }
 
 #svg_3{
