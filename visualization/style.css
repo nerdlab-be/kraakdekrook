@@ -1,3 +1,7 @@
+*{
+  font-family: 'Ropa Sans', sans-serif;
+}
+
 html, body {
   margin: 0;
   width: 1920px;
@@ -15,7 +19,7 @@ html, body {
   text-align: center;
   font-size: 100px;
   line-height: 250px;
-  font-family: 'Ropa Sans', sans-serif;
+  
 }
 
 .triangles {
