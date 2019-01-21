@@ -106,7 +106,8 @@ const rocketReached = (sensor) => {
   const euclid = Math.sqrt((sensor.x - currentGoal.location.x) ** 2 + (sensor.y - currentGoal.location.y) ** 2);
   console.log(euclid + 10000 * (sensor.level - currentGoal.location.level) ** 2);
   const distance = euclid + 10000 * (sensor.level - currentGoal.location.level) ** 2;
-  const tresholdReached = (distance <= 75);
+  // const tresholdReached = (distance <= 75);
+  const tresholdReached = (distance > 75);
   console.log(sensor);
   if (tresholdReached) {
     return "sensor winner";
