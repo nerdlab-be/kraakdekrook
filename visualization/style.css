@@ -90,14 +90,14 @@ video#bgvid {
     border-radius: .4em;
     color: rgba(0,0,0);
     font-size: 60px;
-    margin-bottom: 120px;
+    margin-bottom: 100px;
   }
 
   .textballoon:after {
     content: '';
     position: absolute;
     left: 0%;
-    top: 50%;
+    top: 40%;
     width: 0;
     height: 0;
     border: 40px solid transparent;
