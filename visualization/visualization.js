@@ -121,6 +121,9 @@ const drawSensors = allSensors => {
       .attr("y", d => d.y - ufoSize / 2)
       .attr('width', ufoSize)
       .attr('height', ufoSize)
+      
+      
+      
     
     updatedSensorGraphics.exit()
       .attr("x", d => {console.log(d); return d.x - ufoSize / 2})
