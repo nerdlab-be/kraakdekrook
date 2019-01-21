@@ -1,4 +1,4 @@
-window.setInterval(() => { window.location.reload(); }, 120000);
+window.setInterval(() => { window.location.reload(); }, 3600000);
 
 // Initialize Firebase
 const firebaseConfig = {
