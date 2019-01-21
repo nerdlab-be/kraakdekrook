@@ -75,6 +75,7 @@ video#bgvid {
     font-size: 52px;
     top: 20px;
     left: 30px;
+    color: white;
   }
 
 .textballoon {
@@ -149,7 +150,7 @@ video#bgvid {
 }
 
 #svg_2{
-  margin-left: 50px;
+  margin-left: 75px;
 }
 
 #svg_3{
