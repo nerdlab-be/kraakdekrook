@@ -113,7 +113,7 @@ video#bgvid {
     visibility: none;
   }
 
-  .rotateUFO {
+  .UFO {
     height: 250px;
     padding-bottom: 50px;
     padding-left: 150px; 
@@ -140,3 +140,14 @@ video#bgvid {
   color: white;
 }
 
+#lvl_0{
+  padding-bottom: 50px;
+}
+#svg_0{
+  padding-left: 50px;
+}
+
+#svg__1{
+  padding-left: 200px;
+  margin-top: -50px;
+}
