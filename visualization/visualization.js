@@ -130,8 +130,8 @@ const drawSensors = allSensors => {
        
       
     updatedSensorGraphics.transition()
-      .attr("x", d => d.x)
-      .attr("y", d => d.y)
+      .attr("x", d => xValue(d.x))
+      .attr("y", d => yValue(d.y))
       .attr('class', rocketReached)      
 
     updatedSensorGraphics.enter()
