@@ -109,11 +109,9 @@ const rocketReached = (sensor) => {
   const tresholdReached = (distance <= 75);
   console.log(sensor);
   if (tresholdReached) {
-    console.log("reached");
     return "sensor winner";
   }
   else {
-    console.log("not reached");
     return "sensor";
   }
 }
@@ -162,7 +160,6 @@ const drawSensors = allSensors => {
 };
 
 const drawGoal = goal => {
-  console.log(goal);
   const svg = svgForLevel(goal.location.level);
   const goalCircles = svg.select('.goals');
   const updatedGoalCircles = goalCircles
@@ -218,12 +215,6 @@ db.ref('/goal').on('value', snapshot => {
   }
   else {
     element.classList.add("empty");
-  }
-  if (goal.reached) {
-    console.log("Reached goal!");
-  }
-  else {
-    console.log("Nope, not reached");
   }
 });
 
