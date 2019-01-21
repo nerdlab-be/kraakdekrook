@@ -9,7 +9,7 @@ html, body {
   overflow: hidden;
 }
 #footer {
-  background-image: url('footer.png');
+  background-image: url('/visualization/footer.png');
 }
 .row {
   display: block;
@@ -19,7 +19,6 @@ html, body {
   text-align: center;
   font-size: 100px;
   line-height: 250px;
-  
 }
 
 .triangles {
