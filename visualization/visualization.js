@@ -25,7 +25,7 @@ const linkLengthSquared = (source, target) => {
 };
 
 const xValue = x => 1920 - x;
-const yValue = y => y;
+const yValue = y => y/300*250+25;
 const svgForLevel = level => d3.select((`#svg_${level}`).replace('-', '_'));
 
 const drawLevels = beaconsByLevel => {
