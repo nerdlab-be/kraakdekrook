@@ -1,3 +1,5 @@
+window.setInterval(() => { window.location.reload(); }, 120000);
+
 // Initialize Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyCry7RclR4ZOh4A956n7mqugWUExLAba_0",
