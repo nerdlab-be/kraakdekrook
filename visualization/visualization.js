@@ -161,7 +161,6 @@ const drawGoal = goal => {
   
   updatedGoalCircles.exit()
       .remove()
-  });
 };
 
 d3.json('locations-parsed.json', data => {
