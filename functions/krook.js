@@ -3,6 +3,11 @@ admin.initializeApp();
 let _beacons = null;
 const beaconsRef = admin.database().ref('/beacons');
 
+exports.openingHours = {
+  open: 9,
+  close: 18,
+};
+
 const getBeacons = async() => {
   if (_beacons !== null) {
     return _beacons;
