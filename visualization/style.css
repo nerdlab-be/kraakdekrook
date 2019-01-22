@@ -9,7 +9,7 @@ html, body {
   overflow: hidden;
 }
 #footer {
-  background-image: url('/visualization/footer.png');
+  background-image: url('/visualization/footer.png?v=2');
 }
 .row {
   display: block;
