@@ -1,4 +1,4 @@
-window.setInterval(() => { window.location.reload(); }, 120000);
+window.setInterval(() => { window.location.reload(); }, 3600000);
 
 // Initialize Firebase
 const firebaseConfig = {
@@ -161,7 +161,6 @@ const drawGoal = goal => {
   
   updatedGoalCircles.exit()
       .remove()
-  });
 };
 
 d3.json('locations-parsed.json', data => {

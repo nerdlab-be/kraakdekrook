@@ -1,7 +1,7 @@
 const functions = require('firebase-functions');
 const express = require('express');
 const cors = require('cors');
-const { getLocation, admin, distance } = require('./krook');
+const { getLocation, admin, distance, openingHours } = require('./krook');
 const pois = require('./pois');
 
 const processedSensorsRef = admin.database().ref('/sensors-processed');
@@ -87,7 +87,17 @@ app.put('/:sensorId', async (req, res) => {
     lastHeartbeat: new Date().toISOString(),
     batteryVoltage: req.body.battery,
   });
-  res.send("5000000");
+  const now = new Date();
+  const hour = now.getUTCHours();
+  if (openingHours.open <= hour && hour < openingHours.close) {
+    res.send("5000000");
+  } else {
+    const nextOpeningDay = now.getUTCDate() + (hour >= openingHours.close ? 1 : 0);
+    const nextOpening = new Date(now.getUTCFullYear(), now.getUTCMonth(), nextOpeningDay, openingHours.open);
+    console.log(now, nextOpening)
+    const millisecondstoSleep = nextOpening - now;
+    res.send(String(millisecondstoSleep * 1000));
+  }
 });
 
 exports.heartbeat = functions.https.onRequest(app);
