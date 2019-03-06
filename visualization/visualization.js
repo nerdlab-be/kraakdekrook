@@ -141,26 +141,29 @@ const drawSensors = allSensors => {
 
 const drawGoal = goal => {
   console.log(goal);
-  const svg = svgForLevel(goal.location.level);
-  const goalCircles = svg.select('.goals');
-  const updatedGoalCircles = goalCircles
-    .selectAll('circle.goal')
-    .data([goal], s => s.objectiveText);
-  
-  updatedGoalCircles.transition()
-    .attr('cx', g => xValue(g.location.x))
-    .attr('cy', g => yValue(g.location.y))
-    .attr('r', g => g.radius)
-  
-  updatedGoalCircles.enter()
-    .append('circle')
-    .attr('class', 'goal')
-    .attr('cx', g => xValue(g.location.x))
-    .attr('cy', g => yValue(g.location.y))
-    .attr('r', g => g.radius)
-  
-  updatedGoalCircles.exit()
-      .remove()
+  levels.forEach(level => {
+    const svg = svgForLevel(level);
+    const goals = level === goal.location.level ? [goal] : [];
+    const goalCircles = svg.select('.goals');
+    const updatedGoalCircles = goalCircles
+      .selectAll('circle.goal')
+      .data(goals);
+
+    updatedGoalCircles.transition()
+      .attr('cx', g => xValue(g.location.x))
+      .attr('cy', g => yValue(g.location.y))
+      .attr('r', g => g.radius)
+
+    updatedGoalCircles.enter()
+      .append('circle')
+      .attr('class', 'goal')
+      .attr('cx', g => xValue(g.location.x))
+      .attr('cy', g => yValue(g.location.y))
+      .attr('r', g => g.radius)
+
+    updatedGoalCircles.exit()
+        .remove()
+  });
 };
 
 d3.json('locations-parsed.json', data => {
